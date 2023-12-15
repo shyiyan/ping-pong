@@ -9,7 +9,7 @@
 
 #define PADDLE_HEIGHT 70
 #define PADDLE_WIDTH 10
-#define PADDLE_SPEED 5
+#define PADDLE_SPEED 10
 
 
 int window() {
@@ -50,14 +50,29 @@ int window() {
     
     SDL_Rect ballRect = {WIDTH / 2 - BALL_SIZE / 2, HEIGHT / 2 - BALL_SIZE / 2,  BALL_SIZE, BALL_SIZE};
     SDL_Rect autoPaddleRect = {50, HEIGHT / 2 - BALL_SIZE / 2 + 10, PADDLE_WIDTH, PADDLE_HEIGHT};
+    SDL_Rect userPaddleRect = {450, HEIGHT / 2 - BALL_SIZE / 2 + 10, PADDLE_WIDTH, PADDLE_HEIGHT};
 
     int autoPaddleSpeedHorizontal = PADDLE_SPEED;
     int autoPaddleSpeedVertical =  PADDLE_SPEED;
+    int userPaddleSpeedHorizontal = PADDLE_SPEED;
+    int userPaddleSpeedVertical = PADDLE_SPEED;
 
     while (run) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 run = false;
+            } else if (event.type == SDL_KEYDOWN) {
+                switch (event.key.keysym.sym) {
+                    case SDLK_UP:
+                        userPaddleRect.y -= userPaddleSpeedVertical;
+                        break;
+                    case SDLK_DOWN:
+                        userPaddleRect.y += userPaddleSpeedVertical;
+                    case SDLK_LEFT:
+                        userPaddleRect.x -= userPaddleSpeedHorizontal;
+                    case SDLK_RIGHT:
+                        userPaddleRect.x += userPaddleSpeedHorizontal;
+                }
             }
         }
         
@@ -114,6 +129,12 @@ int window() {
         //draw auto paddle
         SDL_SetRenderDrawColor(renderer, 122, 240, 173, 255);
         SDL_RenderFillRect(renderer, &autoPaddleRect);
+
+
+        //draw user paddle
+        SDL_SetRenderDrawColor(renderer, 255, 169, 71, 255);
+        SDL_RenderFillRect(renderer, &userPaddleRect);
+
         SDL_RenderPresent(renderer);
         SDL_Delay(10);
     }
