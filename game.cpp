@@ -1,6 +1,8 @@
 #include <iostream>
 #include <SDL.h>
 
+
+
 #define WIDTH 500
 #define HEIGHT 500
 #define BUFFER 3000
@@ -103,7 +105,7 @@ int window() {
             autoPaddleSpeedVertical = -ballSpeedVertical;
         }
 
-        //collision
+        //collision with auto paddle
         if (ballRect.x <= autoPaddleRect.x + autoPaddleRect.w &&
         ballRect.x + ballRect.w >= autoPaddleRect.x &&
         ballRect.y <= autoPaddleRect.y + autoPaddleRect.h &&
@@ -111,6 +113,25 @@ int window() {
         ) {
             ballSpeedHorizontal = -ballSpeedHorizontal;
             ballSpeedVertical = -ballSpeedVertical;
+        }
+
+        // collision with user paddle
+        if (ballRect.x <= userPaddleRect.x + userPaddleRect.w &&
+        ballRect.x + ballRect.w >= userPaddleRect.x &&
+        ballRect.y <= userPaddleRect.y + userPaddleRect.h &&
+        ballRect.y + ballRect.h >= userPaddleRect.y
+        ) {
+            ballSpeedHorizontal = -ballSpeedHorizontal;
+            ballSpeedVertical = -ballSpeedVertical;
+        }
+
+
+
+        // user paddle within window range
+        if (userPaddleRect.y < 0) {
+            userPaddleRect.y = 0;
+        } else if (userPaddleRect.y + userPaddleRect.h > HEIGHT) {
+            userPaddleRect.y = HEIGHT - userPaddleRect.h;
         }
 
 
